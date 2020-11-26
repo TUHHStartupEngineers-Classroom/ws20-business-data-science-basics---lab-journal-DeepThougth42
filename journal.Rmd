@@ -1,15 +1,17 @@
 ---
 title: "Journal (reproducible report)"
-author: "Joschka Schwarz"
-date: "2020-11-05"
+author: "Johannes Julius Halbe"
+date: '2020-11-25'
 output:
   html_document:
-    toc: true
-    toc_float: true
-    collapsed: false
-    number_sections: true
+    toc: yes
+    toc_float: yes
+    collapsed: no
+    number_sections: yes
     toc_depth: 3
-    #code_folding: hide
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
 ---
 
 ```{r setup, include=FALSE}
