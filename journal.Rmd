@@ -137,11 +137,70 @@ sales_by_location_year_tbl %>%
 
 ```
 
-# My second post (note the order)
+# Challange 2
 
 Last compiled: `r Sys.Date()`
+```{r}
+#1. API
 
-I'm writing this tutorial going from the top down. And, this is how it will be printed. So, notice the second post is second in the list. If you want your most recent post to be at the top, then make a new post starting at the top. If you want the oldest first, do, then keep adding to the bottom
+library(tidyverse)
+library(httr)
+library(jsonlite)
+library(tibble)
+library(keyring)
+
+
+keyring::key_set("token") 
+
+resp <- GET("https://www.ncdc.noaa.gov/cdo-web/api/v2/stations?limit=1000", add_headers(token = key_get("token")))
+
+stations_tbl <- resp %>% 
+  .$content  %>% 
+  rawToChar() %>% 
+  fromJSON() %>% .$results
+
+head(stations_tbl,10) 
+
+
+#2. Web scraping
+
+# LIBRARIES ----
+
+library(tidyverse) # Main Package - Loads dplyr, purrr, etc.
+library(rvest)     # HTML Hacking & Web Scraping
+library(xopen)     # Quickly opening URLs
+library(jsonlite)  # converts JSON files to R objects
+library(glue)      # concatenate strings
+library(stringi)   # character string/text processing
+
+url  <- "https://www.rosebikes.de/fahrr%C3%A4der/rennrad"
+html <- url %>% 
+  read_html()
+
+
+model_name <-  html %>% 
+  html_nodes(".catalog-category-bikes__title > span") %>% 
+  html_text() %>% 
+  stringr::str_extract("(?<=\n).*(?=\n)") 
+
+model_price_cent <-  html %>% 
+  html_nodes(".catalog-category-bikes__price-title") %>% 
+  html_text() %>% 
+  stringr::str_extract("(?<=ab\\s).*(?=\\s€)")%>% 
+  str_replace_all(c("\\." = "",","=""))%>% 
+  as.numeric()
+
+model_price_EUR = model_price_cent /100
+
+bikes_tbl <- tibble(model_name,model_price_EUR)
+head(bikes_tbl,10)
+
+
+```
+
+
+
+
 
 # Adding R stuff
 
