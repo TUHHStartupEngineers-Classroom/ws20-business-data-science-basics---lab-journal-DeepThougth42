@@ -18,13 +18,11 @@ output:
 knitr::opts_chunk$set(message=FALSE,warning=FALSE, cache=TRUE)
 ```
 
-This is an `.Rmd` file. It is plain text with special features. Any time you write just like this, it will be compiled to normal text in the website. If you put a \# in front of your text, it will create a top level-header.
-
 # Challenge 1
 
 Last compiled: `r Sys.Date()`
 
-```{r}
+```{r , fig.width = 12}
 # Challenge 01 ----
 
 # 1.0 Load libraries ----
@@ -94,6 +92,8 @@ sales_by_location_tbl %>%
     x = "", 
     y = "Revenue"
   )
+
+
 # 6.2 Sales by location & year ----
 
 # Step 1 - Manipulate
@@ -378,11 +378,11 @@ cum_c19_cases_tbl <- covid_data_tbl %>%
           mutate(cum_cases = cumsum(cases)) %>%
           ungroup()
 
-
 # 2.3. Data visualization
 cum_c19_cases_tbl %>% 
   ggplot(aes(date, cum_cases, color = countriesAndTerritories)) +
-  geom_line(aes(color = countriesAndTerritories),size = 1) +
+  geom_line(aes(color = countriesAndTerritories),size = 1,) +
+  scale_color_brewer(palette = "Set1") +
   geom_label_repel(
     data = cum_c19_cases_tbl %>%
       filter(date %in% max(date),
@@ -395,7 +395,6 @@ cum_c19_cases_tbl %>%
     min.segment.length = 1,
     box.padding        = 1.5
   ) +
-  
   
   scale_y_continuous(labels = scales::dollar_format(scale = 1e-6,
                                                     prefix = "",
@@ -417,7 +416,9 @@ cum_c19_cases_tbl %>%
     legend.position = "bottom",
     plot.title = element_text(face = "bold"),
     legend.margin = margin(0.2, 0.2, 0.2, 0.2, "cm"),
-    legend.direction = "vertical"
+    legend.direction = "vertical",
+    legend.spacing.x = unit(1, "cm"),
+    legend.text.align = 0
   )
   
 
@@ -484,4 +485,3 @@ covid_mortality_tbl %>% ggplot()+
         legend.position = c(0.9, 0.4))
 
 ```
-The End!
